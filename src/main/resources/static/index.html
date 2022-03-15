@@ -56,11 +56,15 @@
     </table>
 </div>
 <div id="canvast" style = "float:left; width:50%;" align="center">
-    <!--button onclick="app.drawMouse()" >Create new blueprint</button-->
+    <input type="text" name="newauthor" placeholder="name new blueprint">
+    <button onclick="app.newBlueprint()" >Create new blueprint</button>
     <h2 class="excanvas" ></h2>
     <canvas id="myCanvas" width="500%" height="500%" style="border:1px solid #000000;"></canvas>
-    <div>
-        <button onclick="app.putDate()" >Save/Update</button>
+    <div style = "width:40%; float: left">
+        <button style = "float: right; width:60%;" onclick="app.putDate()" >Save/Update</button>
+    </div>
+    <div style = "width:40%; float: left;">
+        <button style="float: right; width: 30%" onclick="app.deleteBlueprint()">Delete</button>
     </div>
 </div>
 

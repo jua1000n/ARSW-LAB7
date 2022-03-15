@@ -1,33 +1,107 @@
 app = (function () {
     let aut;
     let name;
+    let newNameBlueprint;
     let listAuthor;
-    let pointDraw;
+    let pointDraw=[];
     const mock = apiclient;
     let x = document.getElementById("canvast");
     let c = document.getElementById("myCanvas");
     let ctx = c.getContext("2d");
     //const mock = apimock;
 
-    const putDate = () => {
-        let blueprint = {}
-        blueprint.author = aut;
-        blueprint.name = name;
-        blueprint.points = pointDraw;
-        let putPromise = $.ajax({
-            url: "/blueprints/" + aut + "/" + name,
-            type: 'PUT',
-            data: JSON.stringify(blueprint),
-            contentType: "application/json"
-        });
-        putPromise.then(
-            function () {
-                console.log("OK");
-                getNameAuthorBlueprint();
-            }, function () {
-                console.log("ERROR");
+    const deleteBlueprint = () => {
+        if(aut === "") {
+            alert("Ponga un author");
+        }else {
+            if(name === "") {
+                alert("Seleccione un name de la tabla");
+            }else {
+                ctx.clearRect(0, 0, c.width, c.height);
+                c.width = c.width;
+                let putPromise = $.ajax({
+                    url: "/blueprints/" + aut + "/" + name,
+                    type: 'DELETE'
+                });
+                putPromise.then(
+                    function () {
+                        console.log("OK");
+                        getNameAuthorBlueprint();
+                    }, function () {
+                        console.log("ERROR");
+                    }
+                );
             }
-        );
+        }
+
+    }
+
+    const newBlueprint = () => {
+        aut = document.getElementsByName("author")[0].value;
+        newNameBlueprint = document.getElementsByName("newauthor")[0].value;
+        alert("newBlue");
+        if(aut === "") {
+            alert("No ingreso ningun author")
+        }else {
+            if(newNameBlueprint === "") {
+                alert("No ingreso nombre para el nuevo plano")
+            } else{
+                alert("newBlue2");
+                name="";
+                x.querySelector(".excanvas").innerHTML = (" New current blueprint: " +newNameBlueprint);
+                ctx.clearRect(0, 0, c.width, c.height);
+                c.width = c.width;
+                pointDraw=[];
+                drawMouse();
+            }
+        }
+    }
+
+    const putDate = () => {
+        if(name === "") {
+            if(newNameBlueprint === "") {
+                alert("No aingresado nu nombre para el nuevo blueprint");
+            }else {
+                let blueprint = {}
+                blueprint.author = aut;
+                blueprint.name = newNameBlueprint;
+                blueprint.points = pointDraw;
+                let putPromise = $.ajax({
+                    url: "/blueprints/create",
+                    type: 'POST',
+                    data: JSON.stringify(blueprint),
+                    contentType: "application/json"
+                });
+                putPromise.then(
+                    function () {
+                        console.log("OK");
+                        getNameAuthorBlueprint();
+                    }, function () {
+                        console.log("ERROR");
+                    }
+                );
+            }
+        }else {
+            let blueprint = {}
+            blueprint.author = aut;
+            blueprint.name = name;
+            blueprint.points = pointDraw;
+            let putPromise = $.ajax({
+                url: "/blueprints/" + aut + "/" + name,
+                type: 'PUT',
+                data: JSON.stringify(blueprint),
+                contentType: "application/json"
+            });
+            putPromise.then(
+                function () {
+                    console.log("OK");
+                    getNameAuthorBlueprint();
+                }, function () {
+                    console.log("ERROR");
+                }
+            );
+        }
+
     }
 
     const drawMouse = () => {
@@ -154,7 +228,9 @@ app = (function () {
         drawMouse: drawMouse,
         getNameAuthorBlueprint: getNameAuthorBlueprint,
         getNameAuthorNameBlueprint: getNameAuthorNameBlueprint,
-        putDate: putDate
+        putDate: putDate,
+        newBlueprint: newBlueprint,
+        deleteBlueprint: deleteBlueprint
     }
 
 })();

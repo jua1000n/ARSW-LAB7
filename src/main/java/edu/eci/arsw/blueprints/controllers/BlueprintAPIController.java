@@ -106,6 +106,17 @@ public class BlueprintAPIController {
 
     }
 
+    @RequestMapping(value = "/{author}/{bpname}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> manejadorDeleteRecurso(@PathVariable String author, @PathVariable String bpname) {
+        try {
+            //registrar dato
+            blueprintsServices.deleteBlueprint(author, bpname);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception ex) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     private JsonArray authorNameJson(Blueprint blueprint) {
         JsonArray jsonArray = new JsonArray();
         for (Point a:blueprint.getPoints()) {
